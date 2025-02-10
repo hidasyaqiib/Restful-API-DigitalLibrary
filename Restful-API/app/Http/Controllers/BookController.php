@@ -11,13 +11,17 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::all();
-        return response()->json($books);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Books retrieved successfully.',
+            'data' => $books,
+        ], 200);
     }
 
     // Menyimpan data buku baru
     public function store(Request $request)
     {
-        // Validasi input
         $validatedData = $request->validate([
             'title'       => 'required|string|max:255',
             'writer'      => 'required|string|max:255',
@@ -25,36 +29,31 @@ class BookController extends Controller
             'category_id' => 'required|integer',
             'publisher'   => 'required|string|max:255',
             'year'        => 'required|integer',
+            'stock'       => 'required|integer'
         ]);
 
-        // Buat data buku baru
         $book = Book::create($validatedData);
 
-        return response()->json($book, 201);
+        return response()->json([
+            'status' => 201,
+            'message' => 'Book created successfully.',
+            'data' => $book,
+        ], 201);
     }
 
     // Menampilkan satu data buku berdasarkan ID
-    public function show($id)
+    public function show(Book $book) // ✅ Model Binding
     {
-        $book = Book::find($id);
-
-        if (!$book) {
-            return response()->json(['message' => 'Book not found'], 404);
-        }
-
-        return response()->json($book);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Book retrieved successfully.',
+            'data' => $book,
+        ], 200);
     }
 
     // Mengupdate data buku berdasarkan ID
-    public function update(Request $request, $id)
+    public function update(Request $request, Book $book)
     {
-        $book = Book::find($id);
-
-        if (!$book) {
-            return response()->json(['message' => 'Book not found'], 404);
-        }
-
-        // Validasi input (gunakan rule 'sometimes' jika tidak semua field wajib di-update)
         $validatedData = $request->validate([
             'title'       => 'sometimes|required|string|max:255',
             'writer'      => 'sometimes|required|string|max:255',
@@ -62,25 +61,27 @@ class BookController extends Controller
             'category_id' => 'sometimes|required|integer',
             'publisher'   => 'sometimes|required|string|max:255',
             'year'        => 'sometimes|required|integer',
+            'stock'       => 'sometimes|required|integer'
         ]);
 
-        // Update data buku
-        $book->update($validatedData);
+        // Update data dalam model
+        $book ->update($validatedData);
 
-        return response()->json($book);
+        return response()->json([
+            'message' => 'Book updated successfully',
+            'book'    => $book
+        ]);
     }
 
     // Menghapus data buku berdasarkan ID
-    public function destroy($id)
+    public function destroy(Book $book) // ✅ Model Binding
     {
-        $book = Book::find($id);
-
-        if (!$book) {
-            return response()->json(['message' => 'Book not found'], 404);
-        }
-
         $book->delete();
 
-        return response()->json(['message' => 'Book deleted successfully']);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Book deleted successfully.',
+            'data' => null,
+        ], 200);
     }
 }

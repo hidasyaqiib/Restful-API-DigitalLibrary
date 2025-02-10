@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('stock');
             $table->year('year');
             $table->foreignId('category_id')->on('categories');
+            $table->foreignId('user_id')->on('users');
             $table->timestamps();
         });
     }

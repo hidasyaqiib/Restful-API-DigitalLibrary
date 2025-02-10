@@ -16,6 +16,7 @@ class Book extends Model
         'category_id',
         'publisher',
         'year',
+        'stock'
     ];
 
     // relasi dengan tabel category
