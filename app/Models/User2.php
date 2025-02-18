@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class User2 extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'username',
+        'phone'
+    ];
+
+    public function books()
+    {
+        return $this->hasMany(Book::class, 'user_id');
+    }
+
+    public function loans()
+    {
+        return $this->hasMany(loans::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+}
