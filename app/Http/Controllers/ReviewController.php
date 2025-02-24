@@ -21,12 +21,12 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
 
-        // $request->validate([
-        //     'book_id' => 'required|integer',
-        //     'user_id' => 'required|integer',
-        //     'rating' => 'required|integer|min:1|max:5',
-        //     'comment' => 'nullable|string',
-        // ]);
+        $request->validate([
+            'book_id' => 'required|integer',
+            'user_id' => 'required|integer',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string',
+        ]);
 
 
         $review = Review::create($request->all());
